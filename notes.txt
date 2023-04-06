@@ -1,4 +1,4 @@
-Need to work on detail page
+Need to work on detail page(done)
 
 Insert,delete and index page are working fine
 
