@@ -130,7 +130,6 @@ if (isset($_POST['submit'])) {
     const addTrackBtn = document.querySelector(".add-track"); // Get the add track button
     const removeTrackBtn = document.querySelector(".remove-track"); // Get the remove track button
     let trackCount = 1; // Set the initial track count to 1
-    let myInput;
     addTrackBtn.addEventListener("click", function() {
       trackCount++; // Increment the track count
       const newTrackLabel = document.createElement("label"); // Create a new label element
