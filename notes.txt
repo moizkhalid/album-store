@@ -1,0 +1,4 @@
+Need to work on detail page
+
+Insert,delete and index page are working fine
+
