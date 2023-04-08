@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Album</title>
+  <title>Insert Album</title>
   <!-- css Links -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
           <label for="album">Album</label>
           <input type="text" id="album" name="album" required />
         </div>
-        <div class="row">
+        <div class="row artist-wrapper">
           <label for="artist">Artist</label>
           <input type="text" id="artist" autocomplete="off" name="artist" required />
           <ul id="artistList"></ul>
@@ -77,14 +77,14 @@ if (isset($_POST['submit'])) {
         <ul class="row track-list">
           <li><label for="track1">Track 1:</label> <input type="text" id="track1" name="track[]" required /></li>
         </ul>
-        <div class="action-wrapper"><button class="add-track" type="button">Add</button> or <button class="remove-track" type="button">Remove</button> a Track</div>
-        <button type="submit" name="submit">Submit</button>
+        <div class="action-wrapper"><button class="add-track" type="button">Add Track</button><button class="remove-track" type="button">Remove Track</button> </div>
+        <button type="submit" name="submit" class="submit-btn">Submit</button>
       </form>
     </div>
   </main>
   <script>
     // Autocomplete Artist List Functionality
-    const artistArr = ["artist 1", "artist 2", "artist 3", "artist 4", "artist 5"];
+    const artistArr = ["Ed Sheeran", "Taylor Swift", "Adele", "Ariana Grande", "Ellie Goulding", "Justin Bieber", "Dua Lipa"];
 
     const input = document.getElementById("artist");
     const list = document.getElementById("artistList");
@@ -129,7 +129,9 @@ if (isset($_POST['submit'])) {
     const trackList = document.querySelector(".track-list"); // Get the track list element
     const addTrackBtn = document.querySelector(".add-track"); // Get the add track button
     const removeTrackBtn = document.querySelector(".remove-track"); // Get the remove track button
-    let trackCount = 1; // Set the initial track count to 1
+    const trackInputs = document.querySelectorAll('input[name="track[]"]');
+    let trackCount = trackInputs.length;
+
     addTrackBtn.addEventListener("click", function() {
       trackCount++; // Increment the track count
       const newTrackLabel = document.createElement("label"); // Create a new label element

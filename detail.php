@@ -31,7 +31,7 @@ mysqli_close($conn);
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><?php echo $row['album_name']; ?></title>
+    <title>Detail: <?php echo $row['album_name']; ?></title>
     <!-- css Links -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,15 +54,16 @@ mysqli_close($conn);
     </header>
     <!-- header End -->
     <main>
-        <div class="container">
-            <h1><?php echo $row['album_name']; ?></h1>
-            <h2>by <?php echo $row['artist_name']; ?></h2>
+        <div class="container detail-container">
+            <div><span>Album Name: </span><?php echo $row['album_name']; ?></div>
+            <div><span>Artist Name: </span><?php echo $row['artist_name']; ?></div>
+            <span>Track List</span>
             <ul class="track-list">
                 <?php while ($trackRow = mysqli_fetch_assoc($trackResult)) { ?>
                     <li><?php echo $trackRow['track_name']; ?></li>
                 <?php } ?>
             </ul>
-            <div class="action-wrapper"><a href="index.php">Back to Home</a></div>
+            <a class="submit-btn" href="./update.php?updateid=<?php echo $id; ?>">Update</a>
         </div>
     </main>
 </body>

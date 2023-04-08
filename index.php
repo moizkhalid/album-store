@@ -52,21 +52,24 @@ mysqli_close($conn);
   <main>
     <div class="container">
       <!-- Table Section Start -->
-      <table>
-        <thead>
-          <tr>
-            <th class="album-th">Album</th>
-            <th class="artist-th">Artist</th>
-            <th class="action-td"></th>
-            <th class="action-td"></th>
-            <th class="action-td"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php echo $table_data; ?>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th class="album-th">Album</th>
+              <th class="artist-th">Artist</th>
+              <th class="action-td"></th>
+              <th class="action-td"></th>
+              <th class="action-td"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php echo $table_data; ?>
 
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+
       <!-- Table Section End -->
     </div>
   </main>

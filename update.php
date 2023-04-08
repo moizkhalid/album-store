@@ -4,7 +4,7 @@ include 'connect.php';
 // Check if the form is submitted
 if (isset($_POST['submit'])) {
     // Get the album id from the URL parameter
-    $id = $_GET['detailid'];
+    $id = $_GET['updateid'];
     // Get the input values from the form
     $albumName = $_POST['album'];
     $artistName = $_POST['artist'];
@@ -15,13 +15,15 @@ if (isset($_POST['submit'])) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Insert album data into the albums table
-    $sql = "INSERT INTO albums (album_name, artist_name) VALUES ('$albumName', '$artistName')";
+    // Update album data in the albums table
+    $sql = "UPDATE albums SET album_name='$albumName', artist_name='$artistName' WHERE album_id=$id";
     if (mysqli_query($conn, $sql)) {
-        $albumId = mysqli_insert_id($conn); // Get the ID of the newly inserted album
-        // Insert track data into the tracks table
+        // Delete existing tracks for the album
+        $sql = "DELETE FROM tracks WHERE album_id=$id";
+        mysqli_query($conn, $sql);
+        // Insert new track data into the tracks table
         foreach ($trackNames as $trackName) {
-            $sql = "INSERT INTO tracks (track_name, album_id) VALUES ('$trackName', '$albumId')";
+            $sql = "INSERT INTO tracks (track_name, album_id) VALUES ('$trackName', $id)";
             mysqli_query($conn, $sql);
         }
         mysqli_close($conn);
@@ -30,7 +32,36 @@ if (isset($_POST['submit'])) {
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
+} else {
+    // Get the album id from the URL parameter
+    $id = $_GET['updateid'];
+
+    // Check if the connection was successful
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Retrieve the album data from the database
+    $sql = "SELECT * FROM albums WHERE album_id=$id";
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+    $row = mysqli_fetch_assoc($result);
+    $albumName = $row['album_name'];
+    $artistName = $row['artist_name'];
+
+    // Retrieve the track data from the database
+    $sql = "SELECT * FROM tracks WHERE album_id=$id";
+    $result = mysqli_query($conn, $sql);
+    $trackNames = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $trackNames[] = $row['track_name'];
+    }
+
+    mysqli_close($conn);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +72,7 @@ if (isset($_POST['submit'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Album</title>
+    <title>Update <?php echo $albumName; ?></title>
     <!-- css Links -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,24 +99,29 @@ if (isset($_POST['submit'])) {
             <form method="post">
                 <div class="row">
                     <label for="album">Album</label>
-                    <input type="text" id="album" name="album" required />
+                    <input type="text" id="album" name="album" required value="<?php echo $albumName; ?>" />
                 </div>
-                <div class="row">
+                <div class="row artist-wrapper">
                     <label for="artist">Artist</label>
-                    <input type="text" id="artist" autocomplete="off" name="artist" required />
+                    <input type="text" id="artist" autocomplete="off" name="artist" required value="<?php echo $artistName; ?>" />
                     <ul id="artistList"></ul>
                 </div>
                 <ul class="row track-list">
-                    <li><label for="track1">Track 1:</label> <input type="text" id="track1" name="track[]" required /></li>
+                    <?php foreach ($trackNames as $index => $trackName) { ?>
+                        <li>
+                            <label for="track<?php echo $index + 1; ?>">Track <?php echo $index + 1; ?>:</label>
+                            <input type="text" id="track<?php echo $index + 1; ?>" name="track[]" value="<?php echo $trackName; ?>" required />
+                        </li>
+                    <?php } ?>
                 </ul>
-                <div class="action-wrapper"><button class="add-track" type="button">Add</button> or <button class="remove-track" type="button">Remove</button> a Track</div>
-                <button type="submit" name="submit">Submit</button>
+                <div class="action-wrapper"><button class="add-track" type="button">Add Track</button><button class="remove-track" type="button">Remove Track</button> </div>
+                <button type="submit" name="submit" class="submit-btn">Submit</button>
             </form>
         </div>
     </main>
     <script>
         // Autocomplete Artist List Functionality
-        const artistArr = ["artist 1", "artist 2", "artist 3", "artist 4", "artist 5"];
+        const artistArr = ["Ed Sheeran", "Taylor Swift", "Adele", "Ariana Grande", "Ellie Goulding", "Justin Bieber", "Dua Lipa"];
 
         const input = document.getElementById("artist");
         const list = document.getElementById("artistList");
@@ -130,7 +166,8 @@ if (isset($_POST['submit'])) {
         const trackList = document.querySelector(".track-list"); // Get the track list element
         const addTrackBtn = document.querySelector(".add-track"); // Get the add track button
         const removeTrackBtn = document.querySelector(".remove-track"); // Get the remove track button
-        let trackCount = 1; // Set the initial track count to 1
+        const trackInputs = document.querySelectorAll('input[name="track[]"]');
+        let trackCount = trackInputs.length;
 
         addTrackBtn.addEventListener("click", function() {
             trackCount++; // Increment the track count

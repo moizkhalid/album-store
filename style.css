@@ -60,8 +60,9 @@ a {
   text-align: center !important;
 }
 
-table {
+.table-wrapper {
   width: 100%;
+  overflow-x: auto;
 }
 .container {
   max-width: 1320px;
@@ -73,6 +74,7 @@ nav {
   display: flex;
   background-color: #888;
   padding: 10px;
+  margin-bottom: 30px;
 }
 
 nav .logo a {
@@ -91,7 +93,7 @@ nav .logo a {
 /* Table Section */
 table {
   color: #3f4254;
-  margin-top: 30px;
+  width: 100%;
 }
 table th:not(:last-child) {
   border-right: 2px solid #f2f3f4 !important;
@@ -109,7 +111,10 @@ tbody tr:nth-child(even) {
 tbody tr:nth-child(odd) {
   background-color: #fbfbfb;
 }
-.tbl-action {
+.tbl-action,
+.add-track,
+.remove-track,
+.submit-btn {
   width: 100px;
   display: flex;
   text-align: center;
@@ -119,6 +124,7 @@ tbody tr:nth-child(odd) {
   border-radius: 5px;
   color: white;
   margin: 0 auto;
+  border: 0;
 }
 .action-td {
   width: 120px;
@@ -137,10 +143,10 @@ tbody tr:nth-child(odd) {
   color: white;
 }
 .album-th {
-  min-width: 50px;
+  min-width: 300px;
 }
 .artist-th {
-  min-width: 100px;
+  min-width: 300px;
 }
 /* Insert Page */
 #artistList {
@@ -150,9 +156,14 @@ tbody tr:nth-child(odd) {
   width: 100%;
   position: absolute;
   z-index: 1;
-  max-width: 151px;
-  left: 46px;
-  top: 29px;
+  max-width: 350px;
+  left: 0;
+  top: calc(100% - 10px);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.artist-wrapper {
+  position: relative;
 }
 
 #artistList li {
@@ -166,4 +177,53 @@ tbody tr:nth-child(odd) {
 }
 .track-list {
   list-style: none;
+}
+
+input {
+  border: 0.5px solid #e6e6e6;
+  border-radius: 5px;
+  background-color: #fbfbfb;
+  padding-left: 10px;
+  width: 100%;
+  font-weight: 400;
+  font-size: 14px;
+  height: 35px;
+  max-width: 350px;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.add-track {
+  background: teal;
+  width: 125px;
+  height: 35px;
+  margin: 0;
+}
+
+.remove-track {
+  background: #e78686;
+  width: 125px;
+  height: 35px;
+  margin: 0;
+}
+.action-wrapper {
+  display: flex;
+  justify-content: start;
+  gap: 15px;
+  margin: 15px 0;
+}
+.submit-btn {
+  background-color: #66cc99;
+  margin: 0;
+  height: 35px;
+  width: 265px;
+}
+.detail-container span {
+  font-weight: 600;
 }
